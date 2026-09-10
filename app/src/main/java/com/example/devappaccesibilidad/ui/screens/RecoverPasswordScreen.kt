@@ -51,6 +51,7 @@ fun PantallaRecuperarContrasena(alVolver: () -> Unit) {
             .padding(horizontal = 24.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Botón de volver (IconButton)
         IconButton(
             onClick = alVolver,
             modifier = Modifier.align(Alignment.Start)
@@ -87,6 +88,7 @@ fun PantallaRecuperarContrasena(alVolver: () -> Unit) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // Formulario dentro de un Card
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -94,6 +96,8 @@ fun PantallaRecuperarContrasena(alVolver: () -> Unit) {
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
                 if (!correoEnviado) {
+
+                    // Input de correo electrónico (OutlinedTextField)
                     OutlinedTextField(
                         value = email,
                         onValueChange = {
@@ -120,6 +124,7 @@ fun PantallaRecuperarContrasena(alVolver: () -> Unit) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    // Botón para enviar instrucciones
                     Button(
                         onClick = {
                             when {
@@ -173,6 +178,7 @@ fun PantallaRecuperarContrasena(alVolver: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Vínculo para volver al login (TextButton)
         TextButton(onClick = alVolver) {
             Text("Volver al inicio de sesión")
         }

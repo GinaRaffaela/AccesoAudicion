@@ -36,6 +36,7 @@ import com.example.devappaccesibilidad.data.RepositorioUsuarios
 @Composable
 fun PantallaInicio(email: String, alCerrarSesion: () -> Unit) {
     val usuario = RepositorioUsuarios.buscarPorEmail(email)
+    val todosLosUsuarios = RepositorioUsuarios.obtenerTodos()
 
     Column(
         modifier = Modifier
@@ -68,6 +69,7 @@ fun PantallaInicio(email: String, alCerrarSesion: () -> Unit) {
 
         Spacer(modifier = Modifier.height(28.dp))
 
+        // Datos del usuario activo
         if (usuario != null) {
             Box(
                 modifier = Modifier
@@ -126,6 +128,85 @@ fun PantallaInicio(email: String, alCerrarSesion: () -> Unit) {
                             text = usuario.preferencias.joinToString(", "),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Tabla con todos los usuarios del sistema (array de 5 usuarios)
+        Text(
+            text = "Usuarios registrados",
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.align(Alignment.Start)
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+
+                // Encabezado de la tabla
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Nombre",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1.2f)
+                    )
+                    Text(
+                        text = "País",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(0.8f)
+                    )
+                    Text(
+                        text = "Preferencias",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1.5f)
+                    )
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                // Filas del array de usuarios
+                todosLosUsuarios.forEachIndexed { index, u ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                if (index % 2 == 0) MaterialTheme.colorScheme.surface
+                                else MaterialTheme.colorScheme.surfaceVariant
+                            )
+                            .padding(vertical = 10.dp, horizontal = 4.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Text(
+                            text = u.nombre,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.weight(1.2f)
+                        )
+                        Text(
+                            text = u.pais,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.weight(0.8f)
+                        )
+                        Text(
+                            text = if (u.preferencias.isNotEmpty())
+                                u.preferencias.joinToString(", ")
+                            else "—",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.weight(1.5f)
                         )
                     }
                 }

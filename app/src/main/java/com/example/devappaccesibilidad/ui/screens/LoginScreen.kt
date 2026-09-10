@@ -65,6 +65,7 @@ fun PantallaLogin(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        // Ícono de la app
         Box(
             modifier = Modifier
                 .size(80.dp)
@@ -96,6 +97,7 @@ fun PantallaLogin(
 
         Spacer(modifier = Modifier.height(36.dp))
 
+        // Formulario de inicio de sesión dentro de un Card
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -110,6 +112,7 @@ fun PantallaLogin(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Input de correo electrónico (OutlinedTextField)
                 OutlinedTextField(
                     value = email,
                     onValueChange = {
@@ -127,6 +130,7 @@ fun PantallaLogin(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
+                // Input de contraseña con toggle de visibilidad (OutlinedTextField + IconButton)
                 OutlinedTextField(
                     value = contrasena,
                     onValueChange = {
@@ -162,6 +166,7 @@ fun PantallaLogin(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Vínculo para recuperar contraseña (TextButton)
                 TextButton(
                     onClick = alIrARecuperarContrasena,
                     modifier = Modifier.align(Alignment.End)
@@ -171,6 +176,7 @@ fun PantallaLogin(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Botón principal de ingreso
                 Button(
                     onClick = {
                         when {
@@ -192,6 +198,7 @@ fun PantallaLogin(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Vínculo hacia el registro (TextButton)
         TextButton(onClick = alIrARegistro) {
             Text("¿No tienes cuenta? Regístrate aquí")
         }

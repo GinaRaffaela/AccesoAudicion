@@ -41,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -52,6 +53,8 @@ import com.example.devappaccesibilidad.data.Usuario
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaRegistro(alVolver: () -> Unit) {
+
+    // Estados del formulario
     var nombre by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
@@ -59,13 +62,16 @@ fun PantallaRegistro(alVolver: () -> Unit) {
     var mostrarContrasena by remember { mutableStateOf(false) }
     var mostrarConfirmar by remember { mutableStateOf(false) }
 
+    // Combo box — selección de país
     val paisesDisponibles = listOf("Chile", "Argentina", "Colombia", "México", "Perú", "Bolivia", "Ecuador", "Venezuela", "Uruguay", "Paraguay")
     var paisSeleccionado by remember { mutableStateOf("Chile") }
     var expandirPaises by remember { mutableStateOf(false) }
 
+    // Radio buttons — selección de género
     val opcionesGenero = listOf("Masculino", "Femenino", "Prefiero no decir")
     var generoSeleccionado by remember { mutableStateOf("Masculino") }
 
+    // Checkboxes — preferencias de accesibilidad
     val opcionesPreferencias = listOf("Subtítulos", "Vibraciones", "Texto a voz")
     val preferenciasSeleccionadas = remember { mutableStateListOf<String>() }
 
@@ -81,6 +87,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
+        // Botón de volver (IconButton) + título
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = alVolver) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
@@ -95,6 +102,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Card con inputs de datos personales (OutlinedTextField)
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -105,6 +113,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(14.dp))
 
+                // Input: nombre
                 OutlinedTextField(
                     value = nombre,
                     onValueChange = {
@@ -119,6 +128,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                // Input: email
                 OutlinedTextField(
                     value = email,
                     onValueChange = {
@@ -134,6 +144,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                // Input: contraseña con toggle de visibilidad
                 OutlinedTextField(
                     value = contrasena,
                     onValueChange = {
@@ -158,6 +169,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                // Input: confirmar contraseña
                 OutlinedTextField(
                     value = confirmarContrasena,
                     onValueChange = {
@@ -184,6 +196,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Card con combo box (ExposedDropdownMenuBox) para seleccionar país
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -229,6 +242,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Card con radio buttons para seleccionar género
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -262,6 +276,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Card con checkboxes para preferencias de comunicación
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -318,6 +333,7 @@ fun PantallaRegistro(alVolver: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
         }
 
+        // Botón principal de registro
         Button(
             onClick = {
                 mensajeError = ""
@@ -365,12 +381,14 @@ fun PantallaRegistro(alVolver: () -> Unit) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // Vínculo para volver al login (TextButton)
         TextButton(onClick = alVolver, modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text("¿Ya tienes cuenta? Inicia sesión")
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // Tabla/grilla de usuarios registrados en el sistema
         Text(
             text = "Usuarios registrados",
             style = MaterialTheme.typography.titleLarge,
@@ -385,16 +403,26 @@ fun PantallaRegistro(alVolver: () -> Unit) {
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
             Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+
+                // Encabezados de columna
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = "Nombre",
                         style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f)
                     )
                     Text(
                         text = "Correo",
                         style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "País",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(0.7f)
                     )
                 }
 
@@ -408,18 +436,25 @@ fun PantallaRegistro(alVolver: () -> Unit) {
                                 if (index % 2 == 0) MaterialTheme.colorScheme.surface
                                 else MaterialTheme.colorScheme.surfaceVariant
                             )
-                            .padding(vertical = 10.dp, horizontal = 4.dp)
+                            .padding(vertical = 10.dp, horizontal = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = usuario.nombre,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.weight(1f)
                         )
                         Text(
                             text = usuario.email,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = usuario.pais,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.weight(0.7f)
                         )
                     }
                 }
