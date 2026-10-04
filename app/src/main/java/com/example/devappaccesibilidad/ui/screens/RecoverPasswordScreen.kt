@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.devappaccesibilidad.data.RepositorioUsuarios
+import com.example.devappaccesibilidad.data.ServicioAutenticacion
 
 @Composable
 fun PantallaRecuperarContrasena(alVolver: () -> Unit) {
@@ -134,11 +135,14 @@ fun PantallaRecuperarContrasena(alVolver: () -> Unit) {
                                 !email.contains("@") -> {
                                     mensajeError = "Ingresa un correo electrónico válido."
                                 }
-                                !RepositorioUsuarios.existeEmail(email.trim()) -> {
-                                    mensajeError = "No existe una cuenta con ese correo."
-                                }
                                 else -> {
-                                    correoEnviado = true
+                                    ServicioAutenticacion.recuperarContrasena(email.trim()) { exito, mensaje ->
+                                        if (exito) {
+                                            correoEnviado = true
+                                        } else {
+                                            mensajeError = mensaje
+                                        }
+                                    }
                                 }
                             }
                         },

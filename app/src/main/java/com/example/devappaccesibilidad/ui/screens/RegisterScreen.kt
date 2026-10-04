@@ -41,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -48,11 +49,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.devappaccesibilidad.data.RepositorioUsuarios
+import com.example.devappaccesibilidad.data.ServicioAutenticacion
 import com.example.devappaccesibilidad.data.Usuario
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaRegistro(alVolver: () -> Unit) {
+    val context = LocalContext.current
 
     // Estados del formulario
     var nombre by remember { mutableStateOf("") }
@@ -360,16 +363,18 @@ fun PantallaRegistro(alVolver: () -> Unit) {
                             pais = paisSeleccionado,
                             preferencias = preferenciasSeleccionadas.toList()
                         )
-                        if (RepositorioUsuarios.agregar(nuevo)) {
-                            mensajeExito = "✓ Usuario registrado correctamente."
-                            listaUsuarios = RepositorioUsuarios.obtenerTodos()
-                            nombre = ""
-                            email = ""
-                            contrasena = ""
-                            confirmarContrasena = ""
-                            preferenciasSeleccionadas.clear()
-                        } else {
-                            mensajeError = "El correo electrónico ya está registrado."
+                        ServicioAutenticacion.registrarUsuario(nuevo, context) { exito, mensaje ->
+                            if (exito) {
+                                mensajeExito = "✓ $mensaje"
+                                listaUsuarios = RepositorioUsuarios.obtenerTodos()
+                                nombre = ""
+                                email = ""
+                                contrasena = ""
+                                confirmarContrasena = ""
+                                preferenciasSeleccionadas.clear()
+                            } else {
+                                mensajeError = mensaje
+                            }
                         }
                     }
                 }

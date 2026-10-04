@@ -1,5 +1,9 @@
 package com.example.devappaccesibilidad.data
 
+import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 // Clase de datos que representa a un usuario registrado en la aplicación
 data class Usuario(
     val nombre: String,
@@ -61,23 +65,59 @@ object RepositorioUsuarios {
         )
     )
 
+    private const val PREFS_USUARIOS = "acceso_audicion_usuarios"
+    private const val KEY_LISTA_USUARIOS = "clave_lista_usuarios"
+    private var cargado = false
+
+    fun cargarPersistencia(context: Context) {
+        if (!cargado) {
+            val prefs = context.getSharedPreferences(PREFS_USUARIOS, Context.MODE_PRIVATE)
+            val json = prefs.getString(KEY_LISTA_USUARIOS, null)
+            if (!json.isNullOrBlank()) {
+                try {
+                    val tipo = object : TypeToken<List<Usuario>>() {}.type
+                    val guardados: List<Usuario> = Gson().fromJson(json, tipo)
+                    guardados.forEach { u ->
+                        if (!existeEmail(u.email)) {
+                            usuarios.add(u)
+                        }
+                    }
+                } catch (e: Exception) {
+                    // Ignora si el formato difiere
+                }
+            }
+            cargado = true
+        }
+    }
+
+    private fun persistir(context: Context) {
+        try {
+            val prefs = context.getSharedPreferences(PREFS_USUARIOS, Context.MODE_PRIVATE)
+            val json = Gson().toJson(usuarios)
+            prefs.edit().putString(KEY_LISTA_USUARIOS, json).apply()
+        } catch (e: Exception) {
+            // Manejo silencioso en test
+        }
+    }
+
     fun obtenerTodos(): List<Usuario> = usuarios.toList()
 
     fun autenticar(email: String, contrasena: String): Boolean {
-        return usuarios.any { it.email == email && it.contrasena == contrasena }
+        return usuarios.any { it.email.equals(email.trim(), ignoreCase = true) && it.contrasena == contrasena }
     }
 
     fun existeEmail(email: String): Boolean {
-        return usuarios.any { it.email == email }
+        return usuarios.any { it.email.equals(email.trim(), ignoreCase = true) }
     }
 
-    fun agregar(usuario: Usuario): Boolean {
+    fun agregar(usuario: Usuario, context: Context? = null): Boolean {
         if (existeEmail(usuario.email)) return false
         usuarios.add(usuario)
+        context?.let { persistir(it) }
         return true
     }
 
     fun buscarPorEmail(email: String): Usuario? {
-        return usuarios.find { it.email == email }
+        return usuarios.find { it.email.equals(email.trim(), ignoreCase = true) }
     }
 }

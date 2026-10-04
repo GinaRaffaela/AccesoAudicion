@@ -38,12 +38,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.devappaccesibilidad.data.RepositorioUsuarios
+import com.example.devappaccesibilidad.data.ServicioAutenticacion
 
 @Composable
 fun PantallaLogin(
@@ -51,6 +53,7 @@ fun PantallaLogin(
     alIrARegistro: () -> Unit,
     alIrARecuperarContrasena: () -> Unit
 ) {
+    val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var mostrarContrasena by remember { mutableStateOf(false) }
@@ -183,10 +186,19 @@ fun PantallaLogin(
                             email.isBlank() || contrasena.isBlank() -> {
                                 mensajeError = "Por favor completa todos los campos."
                             }
-                            !RepositorioUsuarios.autenticar(email.trim(), contrasena) -> {
-                                mensajeError = "Correo o contraseña incorrectos."
+                            else -> {
+                                ServicioAutenticacion.iniciarSesion(
+                                    email = email.trim(),
+                                    clave = contrasena,
+                                    context = context
+                                ) { exito, mensaje ->
+                                    if (exito) {
+                                        alIniciarSesion(email.trim())
+                                    } else {
+                                        mensajeError = mensaje
+                                    }
+                                }
                             }
-                            else -> alIniciarSesion(email.trim())
                         }
                     },
                     modifier = Modifier.fillMaxWidth()

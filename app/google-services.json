@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "510153114548",
+    "project_id": "accesoaudicion",
+    "storage_bucket": "accesoaudicion.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510153114548:android:aa4b9910f398e7175c68e1",
+        "android_client_info": {
+          "package_name": "com.example.devappaccesibilidad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSP_sbljTqL1rJeK1Oj5W4c3t-KHMHsmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

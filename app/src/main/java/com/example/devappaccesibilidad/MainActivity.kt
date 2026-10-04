@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.devappaccesibilidad.data.PreferenciasSesion
+import com.example.devappaccesibilidad.data.RepositorioUsuarios
 import com.example.devappaccesibilidad.ui.screens.PantallaInicio
 import com.example.devappaccesibilidad.ui.screens.PantallaLogin
 import com.example.devappaccesibilidad.ui.screens.PantallaRecuperarContrasena
@@ -21,6 +23,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Inicialización y carga de persistencia desde SharedPreferences
+        val prefs = PreferenciasSesion.obtenerInstancia(this)
+        RepositorioUsuarios.cargarPersistencia(this)
+
+        val emailGuardado = prefs.obtenerEmailUsuario()
+        val destinoInicial = if (prefs.estaSesionIniciada() && !emailGuardado.isNullOrBlank()) {
+            "home/$emailGuardado"
+        } else {
+            "login"
+        }
+
         setContent {
             DevAppAccesibilidadTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
@@ -28,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = "login"
+                        startDestination = destinoInicial
                     ) {
                         composable("login") {
                             PantallaLogin(
@@ -57,7 +71,7 @@ class MainActivity : ComponentActivity() {
                                 email = email,
                                 alCerrarSesion = {
                                     navController.navigate("login") {
-                                        popUpTo("home/{email}") { inclusive = true }
+                                        popUpTo(0) { inclusive = true }
                                     }
                                 }
                             )
